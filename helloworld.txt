@@ -1,0 +1,6 @@
+
+# An example hello world program.
+
+print("Hello world!")
+
+# Nothing else.
