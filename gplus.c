@@ -50,6 +50,12 @@ int main(int argc, char** argv) {
 
     } else if(argc == 2) {
 
+        if(argv[2] == "-r") {
+
+            printf("run the project?");
+
+        }
+
         // run from file
         FILE *file;
         file = fopen(argv[1], "r");
