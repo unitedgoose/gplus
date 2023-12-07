@@ -156,4 +156,4 @@ apply, that proxy's public statement of acceptance of any version is
 permanent authorization for you to choose that version for the
 Library.
 
-(Source)[https://www.gnu.org/licenses/lgpl-3.0.md]
+[Source](https://www.gnu.org/licenses/lgpl-3.0.md)
