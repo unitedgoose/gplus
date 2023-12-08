@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include "cmd\cmd.h"
 
 // constants
 const char* version = "0.1.0";
 const short year = 2023;
 
-typedef unsigned int byte;
+typedef unsigned char byte;
 
 // functions
 #define clear() printf("\e[1;1H\e[2J")

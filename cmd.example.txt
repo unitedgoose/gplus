@@ -1,2 +1,0 @@
-D:\git\gplus\helloword.gplus -c example.gplus - compile gplus to exe // this isn't working right now.
-D:\git\gplus\helloword.gplus -r example.gplus - run the code
