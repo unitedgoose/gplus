@@ -1,4 +1,4 @@
-[![](https://dcbadge.vercel.app/api/server/Cn7hsgzusN)](https://discord.gg/Cn7hsgzusN)
+<img src="https://anpang.fun/gplus.png" width="28px" /> <a href="https://discord.gg/Cn7hsgzusN"><img src="https://dcbadge.vercel.app/api/server/Cn7hsgzusN" /></a>
 
 # G<sup>+</sup>
 A new open-source multi-paradigm programming language.
