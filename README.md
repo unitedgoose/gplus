@@ -9,5 +9,13 @@ The repository is private for now, and it's named "gplus" because Github doesn't
 
 G<sup>+</sup> actually has 2 versions: G<sup>+</sup> which is coded in C and runs offline, and G<sup>web</sup> which is coded in client JS and runs on the web.
 
+### Discord server
 You might've noticed that this repository doesn't have an issues page, that's because all of it is on the discord server.\
 So, [**join the discord server!**](https://discord.gg/Cn7hsgzusN) You'll be able to report bugs, give suggestions, get coding help, and see new update leaks.
+
+### Donations
+[**Buy us a coffee!**](https://www.buymeacoffee.com/gplus) It's only $5 or around 170฿.
+
+Donations help support the project and pay for yearly domain costs.
+
+We hope you have fun with G<sup>+</sup>!
