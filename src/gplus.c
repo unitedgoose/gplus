@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include <ctype.h>
+
 #include <string.h>
 #include <math.h>
 #include <time.h>
@@ -13,8 +15,8 @@ const char* version = "0.1.0";
 const short year = 2023;
 
 // macros and typedefs
-int i;
-#define repeat(n) for (i = 0; i < n; i++)
+int ri;
+#define repeat(n) for (ri = 0; ri < n; ++ri)
 
 typedef unsigned char byte;
 
@@ -27,11 +29,28 @@ void error(char* text) {
 
 // runner utils
 char code[4096];
+
 char thisChar;
-int codeLength, charNumber;
+int i, codeLength, charNumber;
+char cache[256];
 
 void goUntil(char until) {
+    i = 0;
+    cache[0] = '\0';
     while(code[charNumber] != until) {
+        cache[i] = code[charNumber];
+        cache[i + 1] = '\0';
+        ++i;
+        ++charNumber;
+    }
+}
+void goUntilAny(char* until) {
+    i = 0;
+    cache[0] = '\0';
+    while(strchr(until, code[charNumber])) {
+        cache[i] = code[charNumber];
+        cache[i + 1] = '\0';
+        ++i;
         ++charNumber;
     }
 }
@@ -57,17 +76,13 @@ void runCode() {
         } else if(isdigit(thisChar) || thisChar == '.') {
 
             // its a number literal
-            // coming soon
-
-        } else if(thisChar == '\'') {
-
-            // its a formatted string literal
-            // also coming soon
+            goUntilAny("0123456789.");
 
         } else if(thisChar == '"') {
 
-            // its a string literal
-            // seriously?
+            // its an unformatted string literal
+            ++charNumber;
+            goUntil('"');
 
         } else {
             printf("Found unsupported char %c\n", code[charNumber]);
