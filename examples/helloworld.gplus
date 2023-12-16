@@ -1,12 +1,6 @@
 
-# An example hello world program.
+# Just an example hello world program.
 
 print("Hello world!")
-
-update(fastest) {
-
-    
-
-}
 
 # Nothing else.

@@ -1,0 +1,21 @@
+
+# Prints incrementing numbers in a loop.
+
+int i = 1
+
+update(500ms) {
+    output(i " ")
+    i: +1
+}
+
+# It'll just keep running forever, until you stop it.
+
+# This currently doesn't work - it's just a concept.
+# The features will be added in later updates.
+
+# Features used:
+#  - Variable definition
+#  - update()
+#  - Units
+#  - String concatenation with spaces
+#  - : operator

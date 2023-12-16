@@ -20,7 +20,8 @@ int ri;
 
 typedef unsigned char byte;
 
-#define clear() printf("\e[1;1H\e[2J")
+#define clear()      printf("\e[1;1H\e[2J")
+#define streql(a, b) strcmp(a, b) == 0
 
 // general functions
 void error(char* text) {
@@ -33,6 +34,7 @@ char code[4096];
 char thisChar;
 int i, codeLength, charNumber;
 char cache[256];
+char charCache[256];
 
 void goUntil(char until) {
     i = 0;
@@ -44,7 +46,7 @@ void goUntil(char until) {
         ++charNumber;
     }
 }
-void goUntilAny(char* until) {
+void goIfAny(char* until) {
     i = 0;
     cache[0] = '\0';
     while(strchr(until, code[charNumber])) {
@@ -52,6 +54,15 @@ void goUntilAny(char* until) {
         cache[i + 1] = '\0';
         ++i;
         ++charNumber;
+    }
+}
+
+void runFunction(char* name, char* args) {
+    if(streql(name, "print")) {
+        ++args;
+        ++args;
+        args[strlen(args) - 1] = '\0';
+        puts(args);
     }
 }
 
@@ -64,7 +75,7 @@ void runCode() {
     while(charNumber < codeLength) {
         thisChar = code[charNumber];
 
-        if(thisChar == ' ') {
+        if(thisChar == ' ' || thisChar == '\n') {
 
             // its a space, do nothing
 
@@ -76,7 +87,7 @@ void runCode() {
         } else if(isdigit(thisChar) || thisChar == '.') {
 
             // its a number literal
-            goUntilAny("0123456789.");
+            goIfAny("0123456789.");
 
         } else if(thisChar == '"') {
 
@@ -84,8 +95,18 @@ void runCode() {
             ++charNumber;
             goUntil('"');
 
+        } else if(thisChar == '(') {
+
+            // start function
+            goUntil(')');
+            runFunction(charCache, cache);
+
         } else {
-            printf("Found unsupported char %c\n", code[charNumber]);
+        
+            i = strlen(charCache);
+            charCache[i] = thisChar;
+            charCache[i + 1] = '\0';
+
         }
 
         ++charNumber;
@@ -107,6 +128,7 @@ int main(int argc, char** argv) {
     char givenCode[1024] = "";
     char line[256] = "";
     char confirm[1];
+    FILE *file;
 
     if(argc == 1) {
 
@@ -121,62 +143,57 @@ int main(int argc, char** argv) {
         );
         return 1;
 
-    } else if(argc == 2) {
+    } else if(argc > 2) {
         switch(argv[1][1]) {
 
             // interpreter console
             case 'i':
 
-            clear();
-            printf(
-                "\033[1mG+ Terminal - Version %s\033[0m\n"
-                "(c) %d Pique & AP\n"
-                "Press enter twice to run code, type \"exit\" to exit\n"
-                ,version, year
-            );
+                clear();
+                printf(
+                    "\033[1mG+ Terminal - Version %s\033[0m\n"
+                    "(c) %d Pique & AP\n"
+                    "Press enter twice to run code, type \"exit\" to exit\n"
+                    ,version, year
+                );
 
-            while(true) {
-                printf(">> ");
-                fgets(line, 256, stdin);
-                if(line[1] == '\0') {
-                    strcpy(code, givenCode);
-                    runCode();
-                    givenCode[0] = '\0';
-                } else if(strcmp(line, "exit\n") == 0) {
-                    error("Exited terminal.");
-                    return 0;
-                } else {
-                    strcat(givenCode, line);
+                while(true) {
+                    printf(">> ");
+                    fgets(line, 256, stdin);
+                    if(line[1] == '\0') {
+                        strcpy(code, givenCode);
+                        runCode();
+                        givenCode[0] = '\0';
+                    } else if(strcmp(line, "exit\n") == 0) {
+                        error("Exited terminal.");
+                        return 0;
+                    } else {
+                        strcat(givenCode, line);
+                    }
                 }
-            }
             
             // lets user type code then run
             case 't':
 
-            clear();
-            puts("\033[1mType your G+ code:\033[0m");
+                clear();
+                puts("\033[1mType your G+ code:\033[0m");
 
-            while(true) {
-                printf("  ");
-                fgets(line, 256, stdin);
-                if(line[1] == '\0') {
-                    strcpy(code, givenCode);
-                    runCode();
-                    return 0;
-                } else {
-                    strcat(givenCode, line);
+                while(true) {
+                    printf("  ");
+                    fgets(line, 256, stdin);
+                    if(line[1] == '\0') {
+                        strcpy(code, givenCode);
+                        runCode();
+                        return 0;
+                    } else {
+                        strcat(givenCode, line);
+                    }
                 }
-            }
 
             // run code from file
             case 'r':
-
-            printf("Run the code in %s? y/n", argv[2]);
-            fgets(confirm, 1, stdin);
-
-            if(confirm[0] == 'y') {
-                FILE *file;
-                file = fopen(argv[1], "r");
+            
+                file = fopen(argv[2], "r");
 
                 while(fgets(line, 1024, file)) {
                     strcat(givenCode, line);
@@ -189,19 +206,12 @@ int main(int argc, char** argv) {
                 }
                 strcpy(code, givenCode);
                 runCode();
-            } else {
-                puts("Cancelled.");
-            }
+                return 0;
 
             // compile code from file to c
             case 'c':
 
-            printf("Compile the code in %s to C? y/n", argv[2]);
-            fgets(confirm, 1, stdin);
-
-            if(confirm[0] == 'y') {
-                FILE *file;
-                file = fopen(argv[1], "r");
+                file = fopen(argv[2], "r");
 
                 while(fgets(line, 1024, file)) {
                     strcat(givenCode, line);
@@ -214,43 +224,44 @@ int main(int argc, char** argv) {
                 }
                 strcpy(code, givenCode);
                 compileCode();
-            } else {
-                puts("Cancelled.");
-            }
+                return 0;
         
             // quack easter egg
             case 'q':
 
-            double quacks = (double)((double)rand() / (double)(RAND_MAX / 0.35)) + 0.3;
-            int totalQuacks = 0;
-        
-            while(totalQuacks < 1000000) {
+                double quacks = (double)((double)rand() / (double)(RAND_MAX / 0.35)) + 0.3;
+                int totalQuacks = 0;
+            
+                while(totalQuacks < 1000000) {
 
-                repeat(ceil(quacks)) {
-                    printf("quack ");
+                    repeat(ceil(quacks)) {
+                        printf("quack ");
+                    }
+
+                    quacks = quacks * (((double)rand() / (double)(RAND_MAX / 0.7)) + 1.25);
+                    totalQuacks = totalQuacks + (int)ceil(quacks);
+                    if(quacks > 10000) {
+                        printf("[%d]", totalQuacks);
+                    }
+
+                    getchar();
+
                 }
 
-                quacks = quacks * (((double)rand() / (double)(RAND_MAX / 0.7)) + 1.25);
-                totalQuacks = totalQuacks + (int)ceil(quacks);
-                if(quacks > 10000) {
-                    printf("[%d]", totalQuacks);
-                }
-
-                getchar();
-
-            }
-
-            puts("");
-            error(
-                "Congratulations! You've reached over a million quacks in one keypress.\n"
-                "So, please stop now or your computer's gonna turn into the Hiroshima bomb."
-            );
-            return 0;
+                puts("");
+                error(
+                    "Congratulations! You've reached over a million quacks in one keypress.\n"
+                    "So, please stop now or your computer's gonna turn into the Hiroshima bomb."
+                );
+                return 0;
 
             // unknown action argument
+            case 'f':
+                error("Unknown action argument. Did you mean \"-r\"?");
+                return 1;
             default:
-            error("Unknown action argument.");
-            return 1;
+                error("Unknown action argument.");
+                return 1;
 
         }
     }
