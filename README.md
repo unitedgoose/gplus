@@ -1,6 +1,3 @@
----
-
-
 # Disclaimer - This project ended!
 Me (Anpang54) and Pique decided to stop making this as a collab, as we couldn't read each other's code.
 
@@ -8,9 +5,11 @@ I forked from this as [Pineapple](https://github.com/Anpang54/pineapple), and Pi
 
 This repo is now a public archive, and the Discord server was already "archived" for a month or so. I'm keeping the organization name (`gplus-lang`) just in case anyone tries to steal it.
 
+** **
 
 ---
 
+** **
 
 <a href="https://discord.gg/Cn7hsgzusN">
   <img src="https://anpang.fun/gplus.png" width="28px" /> <img src="https://dcbadge.vercel.app/api/server/Cn7hsgzusN" />
