@@ -1,9 +1,8 @@
-# Disclaimer - This project ended!
-Me (Anpang54) and Pique decided to stop making this as a collab, as we couldn't read each other's code.
+# Go to [Pineapple](https://github.com/Anpang54/pineapple)! It's the same code, but updated.
+This project (G+) probably won't be revived.
 
-I forked from this as [Pineapple](https://github.com/Anpang54/pineapple), and Pique forked as G#. Feel free to fork from Pineapple and make your own changes (they'll be merged and you'll be credited). As for Pique's C#, he's probably making it closed-source.
-
-This repo is now a public archive, and the Discord server was already "archived" for a month or so. I'm keeping the organization name (`gplus-lang`) just in case anyone tries to steal it.
+This was a collab between me (Anpang54) and pique2312, but we couldn't read each other's code.\
+I forked from this as [Pineapple](https://github.com/Anpang/pineapple), while Pique's making his own object-oriented language called G#.
 
 ---
 
